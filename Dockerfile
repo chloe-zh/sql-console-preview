@@ -1,17 +1,9 @@
-FROM ubuntu:latest
-
-COPY kibana.zip /usr/share
-
-RUN apt-get update && apt-get install -y unzip
-RUN \
-  cd /usr/share && \
-  unzip kibana.zip && rm kibana.zip
-
-
-
-FROM node:10.15.2
-WORKDIR /usr/share/kibana/plugins/sql-kibana-plugin/
-
+FROM node:10.15.2 as build-env
+WORKDIR /kibana/plugins/sql-kibana-plugin/
+COPY ["package.json", "yarn.lock", "./"]
 RUN yarn
+COPY . ./
 RUN yarn build
 
+EXPOSE 5601
+CMD ["yarn start"]
