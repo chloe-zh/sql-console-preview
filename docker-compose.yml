@@ -1,0 +1,39 @@
+version: '3'
+services:
+  node1:
+    image: opendistroforelasticsearch/opendistroforelasticsearch:1.4.0
+    container_name: node1
+    envioronment:
+      - cluster.name=cluster
+      - node.name=node1
+      - discovery.seed_host=node1
+      - cluster.initial_master_nodes=node1
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the Elasticsearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+ 
+  kibana:
+    image: preview:latest
+    container_name: kibana
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      ELASTICSEARCH_URL: https://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: https://elasticsearch:9200
+    networks:
+      - esnet
+
