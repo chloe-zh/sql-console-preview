@@ -1,17 +1,8 @@
 - job:
-    name: "sql-kibana-plugin-build"
+    name: "openes-sql-kibana-snapshot"
     triggers:
       - pollscm:
           cron: "*/5 * * * *"
-      - github-pull-request:
-          build-desc-template: "SQL Kibana Plugin Image Build"
-          permit-all: true
-          github-hooks: true
-          success-status: "Passed"
-          failure-status: "Failed"
-          status-context: "Build"
-          started-status: "Started"
-          triggered-status: "Triggered"
     scm:
       - git:
           url: https://github.com/opendistro-for-elasticsearch/sql-kibana-plugin.git
@@ -30,6 +21,7 @@
               credential-id: 415d76b9-a69c-4541-b55c-13ef253ec26b
               variable: GIT_CREDENTIALS
     builders:
+      #Should avoid cloning Kibana Always.
       - shell: |
           #!/bin/bash -x
           rm -rf kibana
@@ -51,4 +43,5 @@
           yarn kbn bootstrap
           yarn kbn bootstrap
           yarn test:jest
-	  yarn build
+          yarn build
+          aws s3 cp build s3://artifacts.opendistroforelasticsearch.amazon.com/downloads/kibana-plugins/opendistro-sql-kibana "--recursive"
