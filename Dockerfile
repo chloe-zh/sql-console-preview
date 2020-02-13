@@ -1,6 +1,6 @@
 FROM centos:7 AS prep_files
 
-RUN curl curl https://d3g5vo6xdbdb9a.cloudfront.net/tarball/opendistro-elasticsearch/opendistroforelasticsearch-1.4.0.tar.gz -o /opt/opendistroforelasticsearch-1.4.0.tar.gz
+RUN curl https://d3g5vo6xdbdb9a.cloudfront.net/tarball/opendistro-elasticsearch/opendistroforelasticsearch-1.4.0.tar.gz -o /opt/opendistroforelasticsearch-1.4.0.tar.gz
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
