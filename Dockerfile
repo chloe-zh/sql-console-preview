@@ -1,6 +1,6 @@
 FROM centos:7 AS prep_files
 
-RUN curl -Ls https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.4.2-linux-x86_64.tar.gz /opt
+RUN curl https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.4.2-linux-x86_64.tar.gz -o /opt/kibana-oss-7.4.2-linux-x86_64.tar.gz
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
