@@ -5,7 +5,7 @@ RUN curl -Ls https://d3g5vo6xdbdb9a.cloudfront.net/tarball/opendistroforelastics
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
 
-RUN tar --strip-components=1 -zxf /opt/kibana-oss-7.4.2-linux-x86_64.tar.gz
+RUN tar --strip-components=1 -zxf /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
 RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
 
