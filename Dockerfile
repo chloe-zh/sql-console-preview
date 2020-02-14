@@ -1,11 +1,14 @@
 FROM centos:7 AS prep_files
 
-RUN curl https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.4.2-linux-x86_64.tar.gz -o /opt/kibana-oss-7.4.2-linux-x86_64.tar.gz
+RUN curl https://d3g5vo6xdbdb9a.cloudfront.net/downloads/tarball/opendistroforelasticsearch-kibana/opendistroforelasticsearch-kibana-1.4.0.tar.gz -o /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
 
-RUN tar --strip-components=1 -zxf /opt/kibana-oss-7.4.2-linux-x86_64.tar.gz
+RUN tar --strip-components=1 -zxf /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
+RUN rm -rf /usr/share/kibana/plugins/opendistro-alerting
+RUN rm -rf /usr/share/kibana/plugins/opendistro_security
+
 RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
 
