@@ -1,9 +1,12 @@
 version: '3'
 services:
   elasticsearch:
-    image: amazon/opendistro-for-elasticsearch:1.4.0
+    image: chloeamzn/workbench-elasticsearch:latest
     container_name: elasticsearch
     environment:
+      - cluster.name=docker-cluster
+      - node.name=docker-node
+      - discovery.seed_hosts=elasticsearch
       - cluster.initial_master_nodes=elasticsearch
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -16,9 +19,9 @@ services:
         hard: 65536
     volumes:
       - data:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
-      - 9600:9600
     networks:
       - esnet
  
@@ -29,9 +32,6 @@ services:
       - 5601:5601
     expose:
       - "5601"
-    environment:
-      ELASTICSEARCH_URL: https://elasticsearch:9200
-      ELASTICSEARCH_HOSTS: https://elasticsearch:9200
     networks:
       - esnet
 
