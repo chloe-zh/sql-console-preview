@@ -19,7 +19,6 @@ services:
         hard: 65536
     volumes:
       - data:/usr/share/elasticsearch/data
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
     networks:
