@@ -8,6 +8,7 @@ WORKDIR /usr/share/kibana
 RUN tar --strip-components=1 -zxf /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
 RUN rm -rf /usr/share/kibana/plugins/opendistro-alerting
 RUN rm -rf /usr/share/kibana/plugins/opendistro_security
+RUN rm -rf /usr/share/kibana/plugins/opendistro_index_management_kibana
 
 RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
