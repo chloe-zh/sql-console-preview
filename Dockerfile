@@ -39,9 +39,6 @@ COPY --chown=1000:0 kibana.yml /usr/share/kibana/config/kibana.yml
 # variables and translate them to Kibana CLI options.
 COPY --chown=1000:0 kibana-docker /usr/local/bin/
 
-# Add a self-signed SSL certificate for use in examples.
-COPY --chown=1000:0 ssl/opendistroforelasticsearch.example.org.* /usr/share/kibana/config/
-
 RUN chmod g+ws /usr/share/kibana && \
     find /usr/share/kibana -gid 0 -and -not -perm /g+w -exec chmod g+w {} \;
 

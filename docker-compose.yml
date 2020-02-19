@@ -25,7 +25,7 @@ services:
       - esnet
  
   kibana:
-    image:  chloeamzn/sql-console-preview:latest
+    image: chloeamzn/sql-console-preview:latest
     container_name: kibana
     ports:
       - 5601:5601
