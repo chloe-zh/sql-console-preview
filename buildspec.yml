@@ -6,25 +6,24 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email
-      - REPOSITORY_URI=636896061231.dkr.ecr.us-west-2.amazonaws.com/sql-workbench/kibana
+      - $(aws ecr get-login --no-include-email --region us-west-2)
+      - REPO_URI=636896061231.dkr.ecr.us-west-2.amazonaws.com/sql-workbench/kibana
+      - REPO_NAME=sql-workbench/kibana
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $REPO_NAME:latest .
+      - docker tag $REPO_NAME:latest $REPO_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPO_URI:latest
+      - docker push $REPO_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"sql-workbench-kibana","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"sql-workbench-kibana","imageUri":"%s"}]' $REPO_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
