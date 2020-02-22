@@ -24,13 +24,12 @@ COPY --from=prep_files --chown=1000:0 /usr/share/kibana /usr/share/kibana
 
 WORKDIR /usr/share/kibana
 ENV PATH=/usr/share/kibana/bin:$PATH
-
-# awaiting sql-kibana-plugin issues fixing 
-#RUN kibana-plugin install "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-sql-kibana/sql-kibana-1.4.0.0.zip" --allow-root && \
-#    ln -s /usr/share/kibana /opt/kibana && \
-#    chown -R 1000:0 . && \
-#    chmod -R g=u /usr/share/kibana && \
-#    find /usr/share/kibana -type d -exec chmod g+s {} \;
+ 
+RUN kibana-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-dev.sql-workbench/sql-kibana-plugin/sql-kibana-1.4.0.0.zip" --allow-root && \
+    ln -s /usr/share/kibana /opt/kibana && \
+    chown -R 1000:0 . && \
+    chmod -R g=u /usr/share/kibana && \
+    find /usr/share/kibana -type d -exec chmod g+s {} \;
 
 # Set some Kibana configuration defaults.
 COPY --chown=1000:0 kibana.yml /usr/share/kibana/config/kibana.yml
