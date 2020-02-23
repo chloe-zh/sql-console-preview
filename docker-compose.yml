@@ -27,6 +27,8 @@ services:
   kibana:
     image: chloeamzn/sql-console-preview:latest
     container_name: kibana
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - 5601:5601
     expose:
