@@ -32,7 +32,7 @@ RUN kibana-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-de
     find /usr/share/kibana -type d -exec chmod g+s {} \;
 
 # Set some Kibana configuration defaults.
-COPY --chown=1000:0 kibana_init.yml /usr/share/kibana/config/kibana.yml
+COPY --chown=1000:0 kibana.yml /usr/share/kibana/config/kibana.yml
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
