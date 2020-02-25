@@ -63,6 +63,6 @@ LABEL org.label-schema.schema-version="1.0" \
 RUN chmod +x /usr/local/bin/kibana-docker
 RUN export NODE_OPTIONS="--max-old-space-size=4096"
 RUN /usr/local/bin/kibana-docker --optimize
-CMD ["/usr/local/bin/kibana-docker", "-u", " admin:admin", "--insecure"]
+CMD ["/usr/local/bin/kibana-docker"]
 
 
