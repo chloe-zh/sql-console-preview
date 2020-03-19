@@ -1,5 +1,6 @@
 version: '3'
 services:
+<<<<<<< HEAD
   node1:
     image: opendistroforelasticsearch/opendistroforelasticsearch:1.4.0
     container_name: node1
@@ -10,12 +11,28 @@ services:
       - cluster.initial_master_nodes=node1
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+=======
+  elasticsearch:
+    image: chloeamzn/workbench-elasticsearch:latest
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - node.name=docker-node
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+>>>>>>> 3fffc15d859c4fbcff5f0c44cfd27ef26f061fbe
     ulimits:
       memlock:
         soft: -1
         hard: -1
       nofile:
+<<<<<<< HEAD
         soft: 65536 # maximum number of open files for the Elasticsearch user, set to at least 65536 on modern systems
+=======
+        soft: 65536
+>>>>>>> 3fffc15d859c4fbcff5f0c44cfd27ef26f061fbe
         hard: 65536
     volumes:
       - data:/usr/share/elasticsearch/data
@@ -25,15 +42,34 @@ services:
       - esnet
  
   kibana:
+<<<<<<< HEAD
     image: preview:latest
     container_name: kibana
+=======
+    image: chloeamzn/sql-console-preview:latest
+    container_name: kibana
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+>>>>>>> 3fffc15d859c4fbcff5f0c44cfd27ef26f061fbe
     ports:
       - 5601:5601
     expose:
       - "5601"
+<<<<<<< HEAD
     environment:
       ELASTICSEARCH_URL: https://elasticsearch:9200
       ELASTICSEARCH_HOSTS: https://elasticsearch:9200
     networks:
       - esnet
 
+=======
+    networks:
+      - esnet
+
+volumes:
+  data:
+
+networks:
+  esnet:
+
+>>>>>>> 3fffc15d859c4fbcff5f0c44cfd27ef26f061fbe

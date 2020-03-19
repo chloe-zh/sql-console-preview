@@ -47,7 +47,6 @@ kibana_vars=(
     elasticsearch.tribe.ssl.verify
     elasticsearch.tribe.url
     elasticsearch.tribe.username
-    elasticsearch.url
     elasticsearch.username
     kibana.defaultAppId
     kibana.index
@@ -98,7 +97,7 @@ kibana_vars=(
 
 longopts=''
 for kibana_var in ${kibana_vars[*]}; do
-    # 'elasticsearch.url' -> 'ELASTICSEARCH_URL'
+    # 'elasticsearch.hosts' -> 'ELASTICSEARCH_HOSTS'
     env_var=$(echo ${kibana_var^^} | tr . _)
 
     # Indirectly lookup env var values via the name of the var.

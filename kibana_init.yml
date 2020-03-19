@@ -8,9 +8,9 @@
 #
 # or in the "license" file accompanying this file. This file is distributed
 # on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-# express or implied. See the License for the specific					1 language governing
+# express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-server.name: kibana
-server.host: "0"
-# elasticsearch.hosts: https://sql-workbench.us-east-1.es.a9.com:9200
+# Description:
+# Default Kibana configuration for Open Distro.
+
