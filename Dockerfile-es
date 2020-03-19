@@ -1,7 +1,39 @@
-FROM amazon/opendistro-for-elasticsearch:1.4.0
+FROM centos:7 AS prep_files
 
-RUN rm -rf /usr/share/elasticsearch/plugins/opendistro_security
-RUN rm -rf /usr/share/elasticsearch/plugins/opendistro_performance_analyzer
-RUN rm -rf /usr/share/elasticsearch/plugins/opendistro_alerting
+RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.6.1-linux-x86_64.tar.gz -o /opt/elasticsearch-oss-7.6.1-darwin-x86_64.tar.gz
 
-COPY elasticsearch.yml /usr/share/elasticsearch/config
+RUN mkdir /usr/share/elasticsearch
+WORKDIR /usr/share/elasticsearch
+
+RUN tar --strip-components=1 -zxf /opt/elasticsearch-oss-7.6.1-linux-x86_64.tar.gz
+
+
+
+FROM centos:7
+
+ENV ELSTIC_CONTAINER true
+
+RUN yum update -y && yum install -y fontconfig freetype && yum clean all
+COPY --from=prep_files /usr/share/elasticsearch /usr/share/elasticsearch
+
+WORKDIR /usr/share/elasticsearch
+ENV path=/usr/share/elasticsarch/bin:$PATH
+
+RUN elasticsearch-plugin install "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-sql/opendistro_sql-1.6.0.0.zip"
+
+COPY elasticsearch.yml /usr/share/elasticsearch/config/
+
+RUN echo $'= CentOS Licensing and Source Code =\n\nThis image is built from CentOS and DockerHub\'s official build of CentOS (https://hub.docker.com/_/centos). Their image contains various Open Source licensed packages and their DockerHub home page provides information on licensing.\n\nYou can list the packages installed in the image by running \'rpm -qa\', and you can download the source code for the packages CentOS and DockerHub provide via the yumdownloader tool.' > /root/CENTOS_LICENSING.txt
+
+
+LABEL org.label-schema.schema-version="1.0" \
+  org.label-schema.vendor="Amazon" \
+  org.label-schema.name="opendistroforelasticsearch" \
+  org.label-schema.version="{{ version_tag }}" \
+  org.label-schema.url="https://opendistroforelasticsearch.github.io" \
+  org.label-schema.vcs-url="https://github.com/mauve-hedgehog/kibana-oss-distro" \
+  org.label-schema.license="Apache-2.0" \
+  org.label-schema.build-date="{{ build_date }}"
+
+
+CMD ["/usr/local/bin/elasticsearch"]

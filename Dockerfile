@@ -1,11 +1,11 @@
 FROM centos:7 AS prep_files
 
-RUN curl https://d3g5vo6xdbdb9a.cloudfront.net/downloads/tarball/opendistroforelasticsearch-kibana/opendistroforelasticsearch-kibana-1.4.0.tar.gz -o /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
+RUN curl https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.6.1-linux-x86_64.tar.gz -o /opt/kibana-oss-7.6.1-linux-x86_64.tar.gz
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
 
-RUN tar --strip-components=1 -zxf /opt/opendistroforelasticsearch-kibana-1.4.0.tar.gz
+RUN tar --strip-components=1 -zxf /opt/kibana-oss-7.6.1-linux-x86_64.tar.gz
 RUN rm -rf /usr/share/kibana/plugins/opendistro-alerting
 RUN rm -rf /usr/share/kibana/plugins/opendistro_security
 RUN rm -rf /usr/share/kibana/plugins/opendistro_index_management_kibana
@@ -24,8 +24,8 @@ COPY --from=prep_files --chown=1000:0 /usr/share/kibana /usr/share/kibana
 
 WORKDIR /usr/share/kibana
 ENV PATH=/usr/share/kibana/bin:$PATH
- 
-RUN kibana-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-dev.sql-workbench/sql-kibana-plugin/sql-kibana-1.4.0.0.zip" --allow-root && \
+
+RUN kibana-plugin install "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-sql-kibana/sql-kibana-1.6.0.0.zip" --allow-root && \
     ln -s /usr/share/kibana /opt/kibana && \
     chown -R 1000:0 . && \
     chmod -R g=u /usr/share/kibana && \

@@ -13,4 +13,3 @@
 
 server.name: kibana
 server.host: "0"
-elasticsearch.hosts: https://sql-workbench.us-east-1.es.a9.com:9200

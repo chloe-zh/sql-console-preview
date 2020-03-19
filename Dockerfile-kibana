@@ -1,3 +1,0 @@
-FROM chloeamzn/sql-console-preview:latest
-
-RUN rm -rf /usr/share/kibana/config/ssl
