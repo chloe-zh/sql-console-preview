@@ -49,6 +49,3 @@ LABEL org.label-schema.schema-version="1.0" \
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["eswrapper"]
-
-
-CMD ["bin/elasticsearch"]

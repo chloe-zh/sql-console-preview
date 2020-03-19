@@ -75,26 +75,13 @@ done < <(env)
 # will run in.
 export ES_JAVA_OPTS="-Des.cgroups.hierarchy.override=/ $ES_JAVA_OPTS"
 
-if [[ -d bin/x-pack ]]; then
-    # Check for the ELASTIC_PASSWORD environment variable to set the
-    # bootstrap password for Security.
-    #
-    # This is only required for the first node in a cluster with Security
-    # enabled, but we have no way of knowing which node we are yet. We'll just
-    # honor the variable if it's present.
-    if [[ -n "$ELASTIC_PASSWORD" ]]; then
-        [[ -f /usr/share/elasticsearch/config/elasticsearch.keystore ]] || (run_as_other_user_if_needed elasticsearch-keystore create)
-        if ! (run_as_other_user_if_needed elasticsearch-keystore list | grep -q '^bootstrap.password$'); then
-            (run_as_other_user_if_needed echo "$ELASTIC_PASSWORD" | elasticsearch-keystore add -x 'bootstrap.password')
-        fi
-    fi
-fi
-
 if [[ "$(id -u)" == "0" ]]; then
     # If requested and running as root, mutate the ownership of bind-mounts
     if [[ -n "$TAKE_FILE_OWNERSHIP" ]]; then
         chown -R 1000:0 /usr/share/elasticsearch/{data,logs}
     fi
 fi
+
+CLK_TCK=`/usr/bin/getconf CLK_TCK`
 
 run_as_other_user_if_needed /usr/share/elasticsearch/bin/elasticsearch "${es_opts[@]}"
