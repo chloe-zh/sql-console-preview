@@ -1,0 +1,12 @@
+FROM amazon/opendistro-for-elasticsearch:1.6.0
+
+WORKDIR /usr/share/elasticsearch
+ENV PATH=/usr/share/elasticsearch/bin:$PATH
+
+RUN elasticsearch-plugin remove opendistro_alerting
+RUN elasticsearch-plugin remove opendistro_security
+RUN elasticsearch-plugin remove opendistro_performance_analyzer
+
+RUN elasticsearch-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-dev.sql-workbench/sql-plugin/opendistro_sql-1.6.0.0.zip"
+
+COPY elasticsearch.yml /usr/share/elasticsearch/config/
