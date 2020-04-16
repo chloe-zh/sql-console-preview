@@ -19,6 +19,7 @@ COPY --from=prep_files /usr/share/elasticsearch /usr/share/elasticsearch
 WORKDIR /usr/share/elasticsearch
 ENV PATH=/usr/share/elasticsearch/bin:$PATH
 
+RUN mkdir /usr/share/elasticsearch/plugins
 RUN elasticsearch-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-dev.sql-workbench/sql-plugin/opendistro-sql-1.6.0.0.zip"
 
 COPY elasticsearch.yml log4j2.properties /usr/share/elasticsearch/config/
