@@ -1,7 +1,7 @@
 version: '3'
 services:
   elasticsearch:
-    image: chloeamzn/sqlworkbench-es:7.6
+    image: ff99844dc3f7
     container_name: elasticsearch
     environment:
       - node.name=node1
@@ -23,7 +23,7 @@ services:
       - esnet
  
   kibana:
-    image: chloeamzn/sql-console-preview:latest
+    image: 42ae9e4f09d9
     container_name: kibana
     volumes:
       - ./kibana.yml:/usr/share/kibana/config/kibana.yml

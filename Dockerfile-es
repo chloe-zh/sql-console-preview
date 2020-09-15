@@ -1,12 +1,14 @@
 FROM centos:7 AS prep_files
 
-RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.6.1-linux-x86_64.tar.gz -o /opt/elasticsearch-oss-7.6.1-linux-x86_64.tar.gz
+RUN curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.9.1-linux-x86_64.tar.gz -o /opt/elasticsearch-oss-7.9.1-linux-x86_64.tar.gz
 
 RUN mkdir /usr/share/elasticsearch
 WORKDIR /usr/share/elasticsearch
 
-RUN tar --strip-components=1 -zxf /opt/elasticsearch-oss-7.6.1-linux-x86_64.tar.gz
+RUN tar --strip-components=1 -zxf /opt/elasticsearch-oss-7.9.1-linux-x86_64.tar.gz
 
+RUN mkdir /usr/share/plugins
+COPY opendistro_sql-1.10.1.0.zip /usr/share/plugins/opendistro_sql-1.10.1.0.zip
 
 
 FROM centos:7
@@ -14,12 +16,14 @@ FROM centos:7
 ENV ELSTIC_CONTAINER true
 
 RUN yum update -y && yum install -y fontconfig freetype && yum clean all
-COPY --from=prep_files /usr/share/elasticsearch /usr/share/elasticsearch
+COPY --chown=1000:0 --from=prep_files /usr/share/elasticsearch /usr/share/elasticsearch
+COPY --chown=1000:0 --from=prep_files /usr/share/plugins /usr/share/plugins
+
 
 WORKDIR /usr/share/elasticsearch
 ENV PATH=/usr/share/elasticsearch/bin:$PATH
 
-RUN elasticsearch-plugin install "https://s3-us-west-2.amazonaws.com/swift-us-west-2-dev.sql-workbench/sql-plugin/opendistro-sql-1.6.0.0.zip"
+RUN elasticsearch-plugin install --batch file:///usr/share/plugins/opendistro_sql-1.10.1.0.zip
 
 COPY elasticsearch.yml log4j2.properties /usr/share/elasticsearch/config/
 RUN mkdir -p config data logs

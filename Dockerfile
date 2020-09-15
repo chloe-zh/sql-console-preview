@@ -1,18 +1,20 @@
 FROM centos:7 AS prep_files
 
-RUN curl https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.6.1-linux-x86_64.tar.gz -o /opt/kibana-oss-7.6.1-linux-x86_64.tar.gz
+RUN curl https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.9.1-linux-x86_64.tar.gz -o /opt/kibana-oss-7.9.1-linux-x86_64.tar.gz
 
 RUN mkdir /usr/share/kibana
 WORKDIR /usr/share/kibana
 
-RUN tar --strip-components=1 -zxf /opt/kibana-oss-7.6.1-linux-x86_64.tar.gz
-RUN rm -rf /usr/share/kibana/plugins/opendistro-alerting
-RUN rm -rf /usr/share/kibana/plugins/opendistro_security
-RUN rm -rf /usr/share/kibana/plugins/opendistro_index_management_kibana
+RUN tar --strip-components=1 -zxf /opt/kibana-oss-7.9.1-linux-x86_64.tar.gz
 
 RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
 
+RUN mkdir /usr/share/plugins
+COPY opendistro-query-workbench-1.10.1.0.zip /usr/share/plugins/opendistro-query-workbench-1.10.1.0.zip
+COPY trace_analytics-0.0.1.zip /usr/share/plugins/trace_analytics-0.0.1.zip
+COPY gantt_vis-0.0.1.zip /usr/share/plugins/gantt_vis-0.0.1.zip
+COPY kibana_notebooks-0.0.1.zip /usr/share/plugins/kibana_notebooks-0.0.1.zip
 
 
 FROM centos:7
@@ -21,11 +23,16 @@ ENV ELASTIC_CONTAINER true
 
 RUN yum update -y && yum install -y fontconfig freetype && yum clean all
 COPY --from=prep_files --chown=1000:0 /usr/share/kibana /usr/share/kibana
+COPY --from=prep_files --chown=1000:0 /usr/share/plugins /usr/share/plugins
+
 
 WORKDIR /usr/share/kibana
 ENV PATH=/usr/share/kibana/bin:$PATH
 
-RUN kibana-plugin install "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-sql-kibana/sql-kibana-1.6.0.0.zip" --allow-root && \
+RUN kibana-plugin install file:///usr/share/plugins/trace_analytics-0.0.1.zip --allow-root && \ 
+    kibana-plugin install file:///usr/share/plugins/gantt_vis-0.0.1.zip --allow-root && \
+    kibana-plugin install file:///usr/share/plugins/kibana_notebooks-0.0.1.zip --allow-root && \
+    kibana-plugin install file:///usr/share/plugins/opendistro-query-workbench-1.10.1.0.zip --allow-root && \
     ln -s /usr/share/kibana /opt/kibana && \
     chown -R 1000:0 . && \
     chmod -R g=u /usr/share/kibana && \
