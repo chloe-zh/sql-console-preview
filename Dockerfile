@@ -11,7 +11,7 @@ RUN chmod -R g=u /usr/share/kibana
 RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
 
 RUN mkdir /usr/share/plugins
-COPY opendistro-query-workbench-1.10.1.0.zip /usr/share/plugins/opendistro-query-workbench-1.10.1.0.zip
+COPY opendistro-query-workbench.zip /usr/share/plugins/opendistro-query-workbench.zip
 COPY trace_analytics-0.0.1.zip /usr/share/plugins/trace_analytics-0.0.1.zip
 COPY gantt_vis-0.0.1.zip /usr/share/plugins/gantt_vis-0.0.1.zip
 COPY kibana_notebooks-0.0.1.zip /usr/share/plugins/kibana_notebooks-0.0.1.zip
@@ -32,7 +32,7 @@ ENV PATH=/usr/share/kibana/bin:$PATH
 RUN kibana-plugin install file:///usr/share/plugins/trace_analytics-0.0.1.zip --allow-root && \ 
     kibana-plugin install file:///usr/share/plugins/gantt_vis-0.0.1.zip --allow-root && \
     kibana-plugin install file:///usr/share/plugins/kibana_notebooks-0.0.1.zip --allow-root && \
-    kibana-plugin install file:///usr/share/plugins/opendistro-query-workbench-1.10.1.0.zip --allow-root && \
+    kibana-plugin install file:///usr/share/plugins/opendistro-query-workbench.zip --allow-root && \
     ln -s /usr/share/kibana /opt/kibana && \
     chown -R 1000:0 . && \
     chmod -R g=u /usr/share/kibana && \
